@@ -3,8 +3,8 @@
 
 #include <check.h>
 
+#include <gmptools.h>
 #include "schnorr.h"
-#include "gmptools.h"
 
 #define MODULE_NAME "Schnorr"
 #define CORE_NAME "Core"

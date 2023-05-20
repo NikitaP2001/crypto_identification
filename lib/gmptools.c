@@ -1,13 +1,12 @@
 #include <stdlib.h>
 #include <x86intrin.h>
 
-#include <gmp.h>
-
 #include "gmptools.h"
+#include "sha256.h"
 
 void gmpt_import(mpz_t dest, const void *int_data, uint32_t count)
 {
-        mpz_import(dest, count, 1, 1, 0, 0, int_data);
+        mpz_import(dest, count, -1, 1, 0, 0, int_data);
 }
 
 
@@ -15,8 +14,10 @@ uint8_t *gmpt_export(const mpz_t src, uint32_t *count)
 {
         const uint32_t byte_base = 0x100;
         *count = mpz_sizeinbase(src, byte_base);
+        if (*count % GMPT_PAD_SIZE != 0)
+                *count = (*count / GMPT_PAD_SIZE + 1) * GMPT_PAD_SIZE;
         uint8_t *buffer = malloc(*count);
-        mpz_export(buffer, NULL, 1, 1, 0, 0, src);
+        mpz_export(buffer, NULL, -1, 1, 0, 0, src);
         return buffer;
 }
 
@@ -35,4 +36,18 @@ void gmpt_random(mpz_t random, size_t bitlen)
                 mpz_mul_2exp(random, random, step_bits);
                 mpz_add_ui(random, random, step_rnd);
         }
+}
+
+
+void gmpt_sha256(mpz_t x)
+{
+        uint32_t count = 0;
+        uint8_t *buffer = gmpt_export(x, &count);
+
+        struct sha256_state state = {0};
+        sha256_state_init(&state);
+
+        sha256_process_x86(&state, buffer, count);
+
+        free(buffer);
 }

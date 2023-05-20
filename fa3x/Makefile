@@ -1,10 +1,9 @@
-SRC = sha256.c benchmark.c fa3x.c
-TSRC = sha256.c fa3x.c test.c
+SRC = benchmark.c fa3x.c
+TSRC = fa3x.c test.c
 OBJ = $(SRC:%.c=%.o)
 TOBJ = $(TSRC:%.c=%.o)
 
-CFLAGS += -msse -msse2 -msse3 -msse4.1 -msha
-LDLIBS += -lcheck -lgmp
+LDLIBS += -lgmptools -lgmp
 
 %.o: %.c
 	@echo CC $<
@@ -19,6 +18,14 @@ bench: $(OBJ)
 test: $(TOBJ)
 	@echo LD $<
 	$(LD) -o $@ $^ $(LDLIBS) $(LDFLAGS) 
+	
+.PHONY: memtest
+memtest:
+	$(DRMEM) $(LOG_DIR) -- test.exe
+	
+.PHONY: runtest
+runtest:
+	./test.exe
 
 .PHONY: clean
 clean:

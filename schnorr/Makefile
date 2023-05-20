@@ -3,7 +3,7 @@ TSRC = schnorr.c test.c
 OBJ = $(SRC:%.c=%.o)
 TOBJ = $(TSRC:%.c=%.o)
 
-LDLIBS += -lcheck -lgmp
+LDLIBS += -lgmptools -lgmp
 
 %.o: %.c
 	@echo CC $<
@@ -18,7 +18,15 @@ bench: $(OBJ)
 test: $(TOBJ)
 	@echo LD $<
 	$(LD) -o $@ $^ $(LDLIBS) $(LDFLAGS) 
-
+	
+.PHONY: memtest
+memtest: 
+	$(DRMEM) $(LOG_DIR) -- test.exe
+	
+.PHONY: runtest
+runtest: 
+	@-./test.exe
+	
 .PHONY: clean
 clean:
 	@$(RM) bench.exe

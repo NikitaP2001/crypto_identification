@@ -15,21 +15,21 @@ typedef UINT8 uint8_t;
 
 #include "sha256.h"
 
-
-
-void sha256_state_init(uint32_t state[8])
+void sha256_state_init(struct sha256_state *_state)
 {
         static const uint32_t sha256_state[SHA256_STDWCNT] = {
                 0x6a09e667, 0xbb67ae85, 0x3c6ef372, 0xa54ff53a,
                 0x510e527f, 0x9b05688c, 0x1f83d9ab, 0x5be0cd19
         };
-        memcpy(state, sha256_state, sizeof(sha256_state));
+        memcpy(_state->hash_data, sha256_state, sizeof(sha256_state));
 }
 
 /* Process multiple blocks. The caller is responsible for setting the initial */
 /*  state, and the caller is responsible for padding the final block.        */
-void sha256_process_x86(uint32_t state[8], const uint8_t data[], uint32_t length)
+void sha256_process_x86(struct sha256_state *_state, const uint8_t data[],
+ uint32_t length)
 {
+    uint32_t *state = _state->hash_data;
     __m128i STATE0, STATE1;
     __m128i MSG, TMP;
     __m128i MSG0, MSG1, MSG2, MSG3;
