@@ -9,8 +9,8 @@ LDLIBS += -lcheck -lgmp
 %.o: %.c
 	@echo CC $<
 	$(CC) $(CFLAGS) -o $@ $<
-
-all: bench
+	
+all: bench.exe
 
 bench: $(OBJ)
 	@echo LD $<

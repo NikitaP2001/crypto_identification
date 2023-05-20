@@ -17,8 +17,10 @@ all:
 	@$(MAKE) -C schnorr --no-print-directory	
 	
 test:
-	@$(MAKE) -C schnorr --no-print-directory
+	@$(MAKE) -C lib --no-print-directory
+	@$(MAKE) -C schnorr test --no-print-directory
 	
 .PHONY: clean
 clean:
-	@$(MAKE) -C schnorr --no-print-directory
+	@$(MAKE) -C lib clean --no-print-directory
+	@$(MAKE) -C schnorr clean --no-print-directory	

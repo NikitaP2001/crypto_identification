@@ -19,4 +19,5 @@ $(TARGET): $(OBJ)
 
 .PHONY: clean
 clean:	
+	@$(RM) $(TARGET)
 	@$(RM) $(OBJ)

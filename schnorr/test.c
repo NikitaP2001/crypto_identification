@@ -4,6 +4,7 @@
 #include <check.h>
 
 #include "schnorr.h"
+#include "gmptools.h"
 
 #define MODULE_NAME "Schnorr"
 #define CORE_NAME "Core"
@@ -224,7 +225,7 @@ START_TEST(verify_fakes)
         schnorr_user_keys(s, v, &params);
 
         for (int i = 0; i < VERIFY_TIMES; i++) {
-                schnorr_random(s, mpz_sizeinbase(s, 2));
+                gmpt_random(s, mpz_sizeinbase(s, 2));
                 schnorr_preprocess(&params, x, r);
                 
                 schnorr_rndmod(e, params.q);
