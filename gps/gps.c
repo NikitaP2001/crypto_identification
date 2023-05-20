@@ -66,3 +66,43 @@ static const char *domain_g_3072 = "23672204305982296227550746248050612393350155
                                    "090752549946453537885785536677198605499391933813994935784415763063582172303783988" \
                                    "886875203175798639680029558799398150106284415743378141933311678997840668039536152" \
                                    "5500300247621820794190978482526796";
+
+_Bool gps_init(struct gps_params *params, size_t bit_size)
+{
+        switch (bit_size) {
+        case 1024:
+                mpz_init_set_str(params->p, domain_p_1024, 10);
+                mpz_init_set_str(params->q, domain_q_1024, 10);
+                mpz_init_set_str(params->g, domain_g_1024, 10);
+                return true;
+        case 2048:
+                mpz_init_set_str(params->p, domain_p_2048, 10);
+                mpz_init_set_str(params->q, domain_q_2048, 10);
+                mpz_init_set_str(params->g, domain_g_2048, 10);
+                return true;
+        case 3072:
+                mpz_init_set_str(params->p, domain_p_3072, 10);
+                mpz_init_set_str(params->q, domain_q_3072, 10);
+                mpz_init_set_str(params->g, domain_g_3072, 10);
+                return true; 
+        }
+        perror("wrong bit length");
+        return false;
+}
+
+void gps_free(struct gps_params *params)
+{
+        mpz_clear(params->p);
+        mpz_clear(params->q);
+        mpz_clear(params->g);
+        mpz_clear(params->A);
+        mpz_clear(params->B);
+}
+
+void gps_user_keys(mpz_t s, mpz_t I, struct schnorr_params *params)
+{
+        schnorr_rndmod(s, params->q);
+        /* v = g ^ -s mod p */
+        mpz_sub(v, params->q, s);
+        mpz_powm(v, params->g, v, params->p);
+}

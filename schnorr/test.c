@@ -4,9 +4,8 @@
 #include <check.h>
 
 #include "schnorr.h"
-#include "sha256.h"
 
-#define MODULE_NAME "DSA"
+#define MODULE_NAME "Schnorr"
 #define CORE_NAME "Core"
 
 
@@ -106,59 +105,6 @@ START_TEST(domain_q_3072)
 }
 END_TEST
 
-#define SHA_TEST_TIMES 50
-START_TEST(sha256_same)
-{
-        mpz_t msg;
-        mpz_init(msg);
-
-        const size_t bitlen = 64 * CHAR_BIT * 6;
-        for (int i = 0; i < SHA_TEST_TIMES; i++) {
-                uint32_t state_msg[SHA256_STDWCNT], state_msg2[SHA256_STDWCNT], bufsize = 0;
-                schnorr_random(msg, bitlen);
-
-                uint8_t *buffer = schnorr_export(msg, &bufsize);
-                sha256_state_init(state_msg);
-                sha256_process_x86(state_msg, buffer, bufsize);
-
-                uint8_t *buffer2 = schnorr_export(msg, &bufsize);
-                sha256_state_init(state_msg2);
-                sha256_process_x86(state_msg2, buffer2, bufsize);
-                for (int sti = 0; sti < SHA256_STDWCNT; sti++)
-                        ck_assert_int_eq(state_msg[sti], state_msg2[sti]);
-                free(buffer2);
-                free(buffer);
-        }
-        mpz_clear(msg);
-}
-END_TEST
-
-START_TEST(sha256_differ)
-{
-        mpz_t msg;
-        mpz_init(msg);
-
-        const size_t bitlen = 64 * CHAR_BIT * 6;
-        for (int i = 0; i < SHA_TEST_TIMES; i++) {
-                uint32_t state_msg[SHA256_STDWCNT], state_msg2[SHA256_STDWCNT], bufsize = 0;
-                schnorr_random(msg, bitlen);
-
-                uint8_t* buffer = schnorr_export(msg, &bufsize);
-                sha256_state_init(state_msg);
-                sha256_process_x86(state_msg, buffer, bufsize);
-
-                mpz_sub_ui(msg, msg, 1);
-                uint8_t *buffer2 = schnorr_export(msg, &bufsize);
-                sha256_state_init(state_msg2);
-                sha256_process_x86(state_msg2, buffer2, bufsize);
-                for (int sti = 0; sti < SHA256_STDWCNT; sti++)
-                        ck_assert_int_ne(state_msg[sti], state_msg2[sti]);
-                free(buffer2);
-                free(buffer);
-        }
-        mpz_clear(msg);
-}
-END_TEST
 
 START_TEST(preprocess)
 {
@@ -300,7 +246,7 @@ START_TEST(verify_fakes)
 }
 END_TEST
 
-Suite *dsa_suite()
+Suite *schnorr_suite()
 {
         Suite *s = NULL;
         TCase *tc_core = NULL;
@@ -313,8 +259,6 @@ Suite *dsa_suite()
         tcase_add_test(tc_core, domain_q_2048);
         tcase_add_test(tc_core, domain_p_3072);
         tcase_add_test(tc_core, domain_q_3072);
-        tcase_add_test(tc_core, sha256_same);
-        tcase_add_test(tc_core, sha256_differ);
         tcase_add_test(tc_core, preprocess);
         tcase_add_test(tc_core, sign_e);
         tcase_add_test(tc_core, verify_true);
@@ -329,12 +273,12 @@ Suite *dsa_suite()
 int main()
 {
         int number_failed = 0;       
-        Suite *s_dsa = NULL;
+        Suite *s_schnorr = NULL;
         SRunner *sr = NULL;
 
-        s_dsa = dsa_suite();
+        s_schnorr = schnorr_suite();
         
-        sr = srunner_create(s_dsa);
+        sr = srunner_create(s_schnorr);
         
         srunner_run_all(sr, CK_NORMAL);
         number_failed = srunner_ntests_failed(sr);

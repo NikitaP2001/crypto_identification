@@ -1,5 +1,3 @@
-#include <stdint.h>
-
 #include <gmp.h>
 
 struct schnorr_params {
@@ -20,13 +18,7 @@ _Bool schnorr_init(struct schnorr_params *params, size_t bit_size);
 
 void schnorr_free(struct schnorr_params *params);
 
-void schnorr_random(mpz_t random, size_t bitlen);
-
 void schnorr_rndmod(mpz_t random, mpz_t mod);
-
-void schnorr_import(mpz_t dest, const void *int_data, uint32_t count);
-
-uint8_t *schnorr_export(const mpz_t src, uint32_t *count);
 
 /* generate private key s and public key v from s */
 void schnorr_user_keys(mpz_t s, mpz_t v, struct schnorr_params *params);

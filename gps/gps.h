@@ -6,6 +6,9 @@ struct gps_params {
         mpz_t p;
         mpz_t q;
         mpz_t g;
+
+        mpz_t A;
+        mpz_t B;
 };
 
 #define DSA_L_1024 1024
