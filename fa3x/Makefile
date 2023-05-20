@@ -25,7 +25,7 @@ memtest:
 	
 .PHONY: runtest
 runtest:
-	./test.exe
+	@-./test.exe
 
 .PHONY: clean
 clean:

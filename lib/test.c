@@ -3,7 +3,6 @@
 #include <gmp.h>
 #include <check.h>
 
-#include "sha256.h"
 #include "gmptools.h"
 
 #define MODULE_NAME "gmptools"
@@ -28,11 +27,29 @@ START_TEST(sha256_same)
                 uint8_t *buffer2 = gmpt_export(msg, &bufsize);
                 sha256_state_init(&state_msg2);
                 sha256_process_x86(&state_msg2, buffer2, bufsize);
-                for (int sti = 0; sti < SHA256_STDWCNT; sti++)
-                        ck_assert_int_eq(state_msg.hash_data[sti], state_msg2.hash_data[sti]);
+                ck_assert(sha256_cmp(&state_msg, &state_msg2));
                 free(buffer2);
                 free(buffer);
         }
+        mpz_clear(msg);
+}
+END_TEST
+
+START_TEST(gmpt_sha256_same)
+{
+        mpz_t msg;
+        mpz_init(msg);
+
+        for (int i = 12; i < SHA_TEST_TIMES * 64; i += 65) {
+                struct sha256_state state_msg, state_msg2;
+                gmpt_random(msg, i);
+
+                gmpt_sha256(msg, &state_msg);
+
+                gmpt_sha256(msg, &state_msg2);
+                ck_assert(sha256_cmp(&state_msg, &state_msg2));
+        }
+
         mpz_clear(msg);
 }
 END_TEST
@@ -56,11 +73,29 @@ START_TEST(sha256_differ)
                 uint8_t *buffer2 = gmpt_export(msg, &bufsize);
                 sha256_state_init(&state_msg2);
                 sha256_process_x86(&state_msg2, buffer2, bufsize);
-                for (int sti = 0; sti < SHA256_STDWCNT; sti++)
-                        ck_assert_int_ne(state_msg.hash_data[sti], state_msg2.hash_data[sti]);
+                ck_assert(!sha256_cmp(&state_msg, &state_msg2));
                 free(buffer2);
                 free(buffer);
         }
+        mpz_clear(msg);
+}
+END_TEST
+
+START_TEST(gmpt_sha256_differ)
+{
+        mpz_t msg;
+        mpz_init(msg);
+
+        for (int i = 12; i < SHA_TEST_TIMES * 64; i += 65) {
+                struct sha256_state state_msg, state_msg2;
+                gmpt_random(msg, i);
+
+                gmpt_sha256(msg, &state_msg);
+                mpz_sub_ui(msg, msg, 1);
+                gmpt_sha256(msg, &state_msg2);
+                ck_assert(!sha256_cmp(&state_msg, &state_msg2));
+        }
+
         mpz_clear(msg);
 }
 END_TEST
@@ -92,7 +127,10 @@ Suite *gmpt_suite()
         tc_core = tcase_create(CORE_NAME);
 
         tcase_add_test(tc_core, sha256_same);
+        tcase_add_test(tc_core, gmpt_sha256_same);
         tcase_add_test(tc_core, sha256_differ);
+        tcase_add_test(tc_core, gmpt_sha256_differ);
+        tcase_add_test(tc_core, import_export);
         tcase_add_test(tc_core, import_export);
         
         suite_add_tcase(s, tc_core);
