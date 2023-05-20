@@ -20,13 +20,13 @@ START_TEST(sha256_same)
         const size_t bitlen = 64 * CHAR_BIT * 6;
         for (int i = 0; i < SHA_TEST_TIMES; i++) {
                 uint32_t state_msg[SHA256_STDWCNT], state_msg2[SHA256_STDWCNT], bufsize = 0;
-                schnorr_random(msg, bitlen);
+                gmpt_random(msg, bitlen);
 
-                uint8_t *buffer = schnorr_export(msg, &bufsize);
+                uint8_t *buffer = gmpt_export(msg, &bufsize);
                 sha256_state_init(state_msg);
                 sha256_process_x86(state_msg, buffer, bufsize);
 
-                uint8_t *buffer2 = schnorr_export(msg, &bufsize);
+                uint8_t *buffer2 = gmpt_export(msg, &bufsize);
                 sha256_state_init(state_msg2);
                 sha256_process_x86(state_msg2, buffer2, bufsize);
                 for (int sti = 0; sti < SHA256_STDWCNT; sti++)
@@ -46,14 +46,14 @@ START_TEST(sha256_differ)
         const size_t bitlen = 64 * CHAR_BIT * 6;
         for (int i = 0; i < SHA_TEST_TIMES; i++) {
                 uint32_t state_msg[SHA256_STDWCNT], state_msg2[SHA256_STDWCNT], bufsize = 0;
-                schnorr_random(msg, bitlen);
+                gmpt_random(msg, bitlen);
 
-                uint8_t* buffer = schnorr_export(msg, &bufsize);
+                uint8_t* buffer = gmpt_export(msg, &bufsize);
                 sha256_state_init(state_msg);
                 sha256_process_x86(state_msg, buffer, bufsize);
 
                 mpz_sub_ui(msg, msg, 1);
-                uint8_t *buffer2 = schnorr_export(msg, &bufsize);
+                uint8_t *buffer2 = gmpt_export(msg, &bufsize);
                 sha256_state_init(state_msg2);
                 sha256_process_x86(state_msg2, buffer2, bufsize);
                 for (int sti = 0; sti < SHA256_STDWCNT; sti++)
@@ -84,12 +84,12 @@ Suite *fa3x_suite()
 int main()
 {
         int number_failed = 0;       
-        Suite *s_dsa = NULL;
+        Suite *s_fa3x = NULL;
         SRunner *sr = NULL;
 
-        s_dsa = dsa_suite();
+        s_fa3x = fa3x_suite();
         
-        sr = srunner_create(s_dsa);
+        sr = srunner_create(s_fa3x);
         
         srunner_run_all(sr, CK_NORMAL);
         number_failed = srunner_ntests_failed(sr);

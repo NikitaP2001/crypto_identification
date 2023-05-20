@@ -1,29 +1,28 @@
-SRC = benchmark.c fa3x.c sha256.c
-TSRC = fa3x.c test.c sha256.c
+SRC = sha256.c benchmark.c fa3x.c
+TSRC = sha256.c fa3x.c test.c
 OBJ = $(SRC:%.c=%.o)
 TOBJ = $(TSRC:%.c=%.o)
 
-CC = @-gcc
-LD = @-gcc
-RM = @-rm -rf
-
-CFLAGS = -c -g -std=c99 -Wall -Wextra -Wundef -pedantic -mrdseed \
--msse -msse2 -msse3 -msse4.1 -msha
-LDLIBS = -lcheck -lgmp
+CFLAGS += -msse -msse2 -msse3 -msse4.1 -msha
+LDLIBS += -lcheck -lgmp
 
 %.o: %.c
 	@echo CC $<
 	$(CC) $(CFLAGS) -o $@ $<
-
+	
 all: bench
 
 bench: $(OBJ)
-	$(LD) -o $@ $^ $(LDLIBS)
+	@echo LD $<
+	$(LD) -o $@ $^ $(LDLIBS) $(LDFLAGS) 
 
 test: $(TOBJ)
-	$(LD) -o $@ $^ $(LDLIBS)
+	@echo LD $<
+	$(LD) -o $@ $^ $(LDLIBS) $(LDFLAGS) 
 
 .PHONY: clean
 clean:
+	@$(RM) bench.exe
+	@$(RM) test.exe
 	@$(RM) $(OBJ)
 	@$(RM) $(TOBJ)
