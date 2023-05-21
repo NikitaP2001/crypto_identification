@@ -222,7 +222,7 @@ void sha256_process_x86(struct sha256_state *_state, const uint8_t data[],
         _mm_storeu_si128((__m128i*) &state[4], STATE1);
 }
 
-_Bool sha256_cmp(struct sha256_state *first, struct sha256_state *second)
+_Bool sha256_cmp(const struct sha256_state *first, const struct sha256_state *second)
 {
         for (int sti = 0; sti < SHA256_STDWCNT; sti++) {
                 if (first->hash_data[sti] != second->hash_data[sti])

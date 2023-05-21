@@ -3,6 +3,7 @@ TSRC = fa3x.c test.c
 OBJ = $(SRC:%.c=%.o)
 TOBJ = $(TSRC:%.c=%.o)
 
+CFLAGS += -mrdseed
 LDLIBS += -lgmptools -lgmp
 
 %.o: %.c

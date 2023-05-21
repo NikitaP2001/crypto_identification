@@ -5,7 +5,7 @@ TSRC = gmptools.c sha256.c test.c
 OBJ = $(SRC:%.c=%.o)
 TOBJ = $(TSRC:%.c=%.o)
 
-CFLAGS += -mrdseed -msse -msse2 -msse3 -msse4.1 -msha
+CFLAGS += -mrdseed -msse4.1 -msha
 LDLIBS += -lgmp
 
 %.o: %.c
