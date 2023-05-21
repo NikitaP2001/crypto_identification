@@ -132,7 +132,6 @@ Suite *fa3x_suite()
 }
 
 
-
 int main()
 {
         int number_failed = 0;       
