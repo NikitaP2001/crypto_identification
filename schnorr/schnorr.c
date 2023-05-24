@@ -97,19 +97,9 @@ void schnorr_free(struct schnorr_params *params)
 }
 
 
-/* get uniform random value 0 < random < mod */
-void schnorr_rndmod(mpz_t random, mpz_t mod)
-{
-        do {
-                size_t bitlen = mpz_sizeinbase(mod, 2);
-                gmpt_random(random, bitlen);
-        } while (mpz_cmp_ui(random, 0) == 0);
-}
-
-
 void schnorr_user_keys(mpz_t s, mpz_t v, struct schnorr_params *params)
 {
-        schnorr_rndmod(s, params->q);
+        gmpt_rndmod(s, params->q);
         /* v = g ^ -s mod p */
         mpz_sub(v, params->q, s);
         mpz_powm(v, params->g, v, params->p);
@@ -120,7 +110,7 @@ void schnorr_user_keys(mpz_t s, mpz_t v, struct schnorr_params *params)
  * shared @x = g ^ r mod p */
 void schnorr_preprocess(struct schnorr_params *params, mpz_t x, mpz_t r)
 {
-        schnorr_rndmod(r, params->q);
+        gmpt_rndmod(r, params->q);
 
         mpz_powm(x, params->g, r, params->p);
 }

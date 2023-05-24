@@ -4,14 +4,9 @@
 
 #include <sys/time.h>
 
+#include <gmptools.h>
 #include "schnorr.h"
 
-
-static double get_current_time() {
-	struct timeval t;
-	gettimeofday(&t, 0);
-	return t.tv_sec + t.tv_usec*1e-6;
-}
 
 void benchmark_round(size_t keysize, double *t_proover, double *t_verifier)
 {
@@ -35,7 +30,7 @@ void benchmark_round(size_t keysize, double *t_proover, double *t_verifier)
         /* A->B: v, x */
         /* B generates challenge e */
         double ver_start = get_current_time();
-        schnorr_rndmod(e, params.q);
+        gmpt_rndmod(e, params.q);
         *t_verifier = get_current_time() - ver_start;
         /* B->A: e */
         prv_start = get_current_time();

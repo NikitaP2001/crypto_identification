@@ -6,13 +6,9 @@
 
 #include <sys/time.h>
 
+#include <gmptools.h>
 #include "fa3x.h"
 
-static double get_current_time() {
-	struct timeval t;
-	gettimeofday(&t, 0);
-	return t.tv_sec + t.tv_usec*1e-6;
-}
 
 _Bool benchmark_round(size_t N, double *t_prov, double *t_ver)
 {
@@ -59,8 +55,8 @@ int main()
 
                 benchmark(i, 100, &t_prov, &t_ver);
                 printf("N = %d", i);
-                printf("\n\ravg time prove: %f\n", t_prov);
-                printf("\n\ravg time verify: %f\n\n", t_ver);
+                printf("\n\ravg time prove: %.7f\n", t_prov);
+                printf("\n\ravg time verify: %.7f\n\n", t_ver);
         }
         
 

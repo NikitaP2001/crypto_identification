@@ -101,7 +101,7 @@ void gps_free(struct gps_params *params)
 
 void gps_user_keys(mpz_t s, mpz_t I, struct schnorr_params *params)
 {
-        schnorr_rndmod(s, params->q);
+        gmpt_rndmod(s, params->q);
         /* v = g ^ -s mod p */
         mpz_sub(v, params->q, s);
         mpz_powm(v, params->g, v, params->p);

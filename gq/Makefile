@@ -1,22 +1,20 @@
-TARGET = libgmptools.a
-
-SRC = gmptools.c sha256.c
-TSRC = gmptools.c sha256.c test.c
+SRC = benchmark.c fa3x.c
+TSRC = fa3x.c test.c
 OBJ = $(SRC:%.c=%.o)
 TOBJ = $(TSRC:%.c=%.o)
 
-CFLAGS += -mrdrnd -msse4.1 -msha
-LDLIBS += -lgmp
+CFLAGS += -mrdseed
+LDLIBS += -lgmptools -lgmp
 
 %.o: %.c
 	@echo CC $<
 	$(CC) $(CFLAGS) -o $@ $<
-
-all: $(TARGET)
 	
-$(TARGET): $(OBJ)
-	@echo AR $<
-	$(AR) rsc -o $@ $^
+all: bench
+
+bench: $(OBJ)
+	@echo LD $<
+	$(LD) -o $@ $^ $(LDLIBS) $(LDFLAGS) 
 
 test: $(TOBJ)
 	@echo LD $<
@@ -29,10 +27,10 @@ memtest:
 .PHONY: runtest
 runtest:
 	@-./test.exe
-	
+
 .PHONY: clean
-clean:	
+clean:
+	@$(RM) bench.exe
 	@$(RM) test.exe
-	@$(RM) $(TARGET)
 	@$(RM) $(OBJ)
 	@$(RM) $(TOBJ)

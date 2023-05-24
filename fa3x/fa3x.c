@@ -11,14 +11,14 @@ static void fa3x_random(uint8_t *buffer, size_t length)
 {
         while (length / 8 > 0) {
                 uint64_t step_rnd = 0;
-                while (_rdseed64_step(&step_rnd) == 0);
+                while (_rdrand64_step(&step_rnd) == 0);
                 *((uint64_t*)buffer) = step_rnd;
                 buffer += 8;
                 length -= 8;
         }
         while (length > 0) {
                 uint16_t step_rnd = 0;
-                while (_rdseed16_step(&step_rnd) == 0);
+                while (_rdrand16_step(&step_rnd) == 0);
                 *((uint8_t*)buffer) = (uint8_t)step_rnd;
                 buffer += 1;
                 length -= 1;
@@ -85,7 +85,7 @@ void fa3x_member_in(struct member_params *params, fa3x_key_t r, fa3x_key_t in1, 
         fa3x_block temp = {0}; 
         size_t n_a = 0;
 
-        while (_rdseed64_step(&n_a) == 0);
+        while (_rdrand64_step(&n_a) == 0);
         n_a = (n_a % (params->N - 1)) + 1;
 
         fa3x_key_t round_id;

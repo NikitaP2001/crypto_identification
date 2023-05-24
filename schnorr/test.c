@@ -150,7 +150,7 @@ START_TEST(sign_e)
 
         schnorr_preprocess(&params, x, r);
         
-        schnorr_rndmod(e, params.q);
+        gmpt_rndmod(e, params.q);
 
         schnorr_sign(&params, y, r, s, e);
         mpz_mul(s, s, e);
@@ -189,7 +189,7 @@ START_TEST(verify_true)
         for (int i = 0; i < VERIFY_TIMES; i++) {
                 schnorr_preprocess(&params, x, r);
                 
-                schnorr_rndmod(e, params.q);
+                gmpt_rndmod(e, params.q);
 
                 schnorr_sign(&params, y, r, s, e);
                 
@@ -228,7 +228,7 @@ START_TEST(verify_fakes)
                 gmpt_random(s, mpz_sizeinbase(s, 2));
                 schnorr_preprocess(&params, x, r);
                 
-                schnorr_rndmod(e, params.q);
+                gmpt_rndmod(e, params.q);
 
                 schnorr_sign(&params, y, r, s, e);
                 
