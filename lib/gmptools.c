@@ -41,7 +41,7 @@ void gmpt_random(mpz_t random, size_t bitlen)
 
 
 /* get uniform random value 0 < random < mod */
-void gmpt_rndmod(mpz_t random, mpz_t mod)
+void gmpt_rndmod(mpz_t random, const mpz_t mod)
 {
         do {
                 size_t bitlen = mpz_sizeinbase(mod, 2);

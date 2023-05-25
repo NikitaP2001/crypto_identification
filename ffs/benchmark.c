@@ -62,18 +62,18 @@ int main()
 
         benchmark(FFS_NLEN_1024, 100, &t_prov, &t_ver);
         printf("N = %d", FFS_NLEN_1024);
-        printf("\n\ravg time prove: %f\n", t_prov);
-        printf("\n\ravg time verify: %f\n\n", t_ver);
+        printf("\n\ravg time prove: %.7f\n", t_prov);
+        printf("\n\ravg time verify: %.7f\n\n", t_ver);
 
         benchmark(FFS_NLEN_2048, 100, &t_prov, &t_ver);
         printf("N = %d", FFS_NLEN_2048);
-        printf("\n\ravg time prove: %f\n", t_prov);
-        printf("\n\ravg time verify: %f\n\n", t_ver);
+        printf("\n\ravg time prove: %.7f\n", t_prov);
+        printf("\n\ravg time verify: %.7f\n\n", t_ver);
 
         benchmark(FFS_NLEN_3072, 100, &t_prov, &t_ver);
         printf("N = %d", FFS_NLEN_3072);
-        printf("\n\ravg time prove: %f\n", t_prov);
-        printf("\n\ravg time verify: %f\n\n", t_ver);
+        printf("\n\ravg time prove: %.7f\n", t_prov);
+        printf("\n\ravg time verify: %.7f\n\n", t_ver);
 
         exit(0);
 }

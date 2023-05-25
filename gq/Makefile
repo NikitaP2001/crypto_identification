@@ -1,5 +1,5 @@
-SRC = benchmark.c fa3x.c
-TSRC = fa3x.c test.c
+SRC = benchmark.c gq.c
+TSRC = gq.c test.c
 OBJ = $(SRC:%.c=%.o)
 TOBJ = $(TSRC:%.c=%.o)
 

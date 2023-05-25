@@ -13,7 +13,7 @@ uint8_t *gmpt_export(const mpz_t src, uint32_t *count);
 
 void gmpt_random(mpz_t random, size_t bitlen);
 
-void gmpt_rndmod(mpz_t random, mpz_t mod);
+void gmpt_rndmod(mpz_t random, const mpz_t mod);
 
 _Bool gmpt_isprime(mpz_t value);
 
