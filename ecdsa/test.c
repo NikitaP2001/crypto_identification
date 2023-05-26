@@ -17,8 +17,8 @@ START_TEST(params_interval)
         ck_assert_int_lt(mpz_cmp(params.a, params.p), 0);
         ck_assert_int_ge(mpz_cmp_ui(params.b, 0), 0);
         ck_assert_int_lt(mpz_cmp(params.b, params.p), 0);
-        ck_assert_int_ge(mpz_cmp_ui(params.x_G, 0), 0);
-        ck_assert_int_lt(mpz_cmp(params.y_G, params.p), 0);
+        ck_assert_int_ge(mpz_cmp_ui(params.G.x, 0), 0);
+        ck_assert_int_lt(mpz_cmp(params.G.y, params.p), 0);
 
         ecdsa_free(&params);
 }
@@ -49,13 +49,13 @@ START_TEST(points_curve)
         ecdsa_init(&params);        
         mpz_init(temp);
 
-        mpz_powm_ui(params.y_G, params.y_G, 2, params.p);
-        mpz_powm_ui(temp, params.x_G, 3, params.p);
-        mpz_mul(params.x_G, params.a, params.x_G);
-        mpz_add(temp, temp, params.x_G);
+        mpz_powm_ui(params.G.x, params.G.y, 2, params.p);
+        mpz_powm_ui(temp, params.G.x, 3, params.p);
+        mpz_mul(params.G.x, params.a, params.G.x);
+        mpz_add(temp, temp, params.G.x);
         mpz_add(temp, temp, params.b);
         mpz_mod(temp, temp, params.p);
-        ck_assert_int_eq(mpz_cmp(params.y_G, temp), 0);
+        ck_assert_int_eq(mpz_cmp(params.G.x, temp), 0);
 
         mpz_clear(temp);
         ecdsa_free(&params);
