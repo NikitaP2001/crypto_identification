@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdlib.h>
 #include <x86intrin.h>
 #include <sys/time.h>
@@ -21,22 +22,24 @@ uint8_t *gmpt_export(const mpz_t src, uint32_t *count)
         return buffer;
 }
 
+static uint64_t get_random_seed()
+{
+        uint64_t seed = 0;
+        while (_rdrand64_step(&seed) == 0);
+        return seed;
+}
+
+static gmp_randstate_t gmpt_rstate;
+_Bool once = false;
 
 void gmpt_random(mpz_t random, size_t bitlen)
 {
-        const size_t dword_bits = sizeof(uint32_t) * CHAR_BIT;
-        mpz_set_ui(random, 0);
-        while (bitlen > 0) {
-                uint32_t step_rnd = 0;
-                while (_rdrand32_step(&step_rnd) == 0);
-
-                size_t step_bits = (bitlen < dword_bits) ? bitlen : dword_bits;
-                step_rnd >>= dword_bits - step_bits;
-                bitlen -= step_bits;
-
-                mpz_mul_2exp(random, random, step_bits);
-                mpz_add_ui(random, random, step_rnd);
+        if (!once) {
+                gmp_randinit_mt(gmpt_rstate);
+                gmp_randseed_ui(gmpt_rstate, get_random_seed());
+                once = true;
         }
+        mpz_urandomb(random, gmpt_rstate, bitlen);
 }
 
 

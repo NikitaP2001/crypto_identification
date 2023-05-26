@@ -3,8 +3,7 @@
 #include <stdint.h>
 #include <stdio.h>
 
-#include <x86intrin.h>
-
+#include <gmptools.h>
 #include "gps.h"
 
 static const char *domain_p_1024 = "161112292587095383147111851630730203802946564227034344414818646092057864247055077" \
@@ -67,20 +66,20 @@ static const char *domain_g_3072 = "23672204305982296227550746248050612393350155
                                    "886875203175798639680029558799398150106284415743378141933311678997840668039536152" \
                                    "5500300247621820794190978482526796";
 
-_Bool gps_init(struct gps_params *params, size_t bit_size)
+_Bool gps_init(struct schnorr_params *params, size_t bit_size)
 {
         switch (bit_size) {
-        case 1024:
+        case GPS_L_1024:
                 mpz_init_set_str(params->p, domain_p_1024, 10);
                 mpz_init_set_str(params->q, domain_q_1024, 10);
                 mpz_init_set_str(params->g, domain_g_1024, 10);
                 return true;
-        case 2048:
+        case GPS_L_2048:
                 mpz_init_set_str(params->p, domain_p_2048, 10);
                 mpz_init_set_str(params->q, domain_q_2048, 10);
                 mpz_init_set_str(params->g, domain_g_2048, 10);
                 return true;
-        case 3072:
+        case GPS_L_3072:
                 mpz_init_set_str(params->p, domain_p_3072, 10);
                 mpz_init_set_str(params->q, domain_q_3072, 10);
                 mpz_init_set_str(params->g, domain_g_3072, 10);
@@ -90,19 +89,50 @@ _Bool gps_init(struct gps_params *params, size_t bit_size)
         return false;
 }
 
-void gps_free(struct gps_params *params)
+void gps_free(struct schnorr_params *params)
 {
         mpz_clear(params->p);
         mpz_clear(params->q);
         mpz_clear(params->g);
-        mpz_clear(params->A);
-        mpz_clear(params->B);
 }
 
-void gps_user_keys(mpz_t s, mpz_t I, struct schnorr_params *params)
+
+void gps_user_keys(mpz_t s, mpz_t v, struct schnorr_params *params)
 {
         gmpt_rndmod(s, params->q);
         /* v = g ^ -s mod p */
         mpz_sub(v, params->q, s);
         mpz_powm(v, params->g, v, params->p);
+}
+
+/* prover preprocessing step, produces 
+ * secret random @r E [1, ..,q-1]
+ * shared @x = g ^ r mod p */
+void gps_preprocess(struct schnorr_params *params, mpz_t x, mpz_t r)
+{
+        gmpt_rndmod(r, params->q);
+
+        mpz_powm(x, params->g, r, params->p);
+}
+
+/* 0 < @e < q is intended to be provided by B as a challange to be signed.
+ * @s is A private key
+ * @r - provers private random generated
+ * @y = r + se (mod q) - result */
+void gps_sign(mpz_t y, mpz_t r, mpz_t s, mpz_t e)
+{
+        mpz_mul(y, s, e);
+        mpz_add(y, y, r);
+}
+
+void gps_verify(struct schnorr_params *params, mpz_t x_ver, mpz_t y, mpz_t v, mpz_t e)
+{
+        mpz_t g_pow_y, v_pow_e;
+        mpz_init(g_pow_y);
+        mpz_init(v_pow_e);
+        mpz_mod(y, y, params->q);
+        mpz_powm(g_pow_y, params->g, y, params->p);
+        mpz_powm(v_pow_e, v, e, params->p);
+        mpz_mul(x_ver, g_pow_y, v_pow_e);
+        mpz_mod(x_ver, x_ver, params->p);
 }

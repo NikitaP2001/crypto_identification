@@ -3,6 +3,7 @@
 #include <gmp.h>
 #include <check.h>
 
+#include <gmptools.h>
 #include "gq.h"
 
 #define MODULE_NAME "GQ"

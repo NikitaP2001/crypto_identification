@@ -18,6 +18,8 @@ all:
 	@$(MAKE) -C fa3x --no-print-directory	
 	@$(MAKE) -C ffs --no-print-directory	
 	@$(MAKE) -C gq --no-print-directory	
+	@$(MAKE) -C gps --no-print-directory	
+	@$(MAKE) -C ecdsa --no-print-directory	
 	
 test: all
 	@$(MAKE) -C lib test --no-print-directory
@@ -25,6 +27,8 @@ test: all
 	@$(MAKE) -C fa3x test --no-print-directory
 	@$(MAKE) -C ffs test --no-print-directory
 	@$(MAKE) -C gq test --no-print-directory
+	@$(MAKE) -C gps test --no-print-directory
+	@$(MAKE) -C ecdsa test --no-print-directory
 	
 runtest:
 	@$(MAKE) -C lib runtest --no-print-directory
@@ -32,6 +36,8 @@ runtest:
 	@$(MAKE) -C fa3x runtest --no-print-directory
 	@$(MAKE) -C ffs runtest --no-print-directory
 	@$(MAKE) -C gq runtest --no-print-directory
+	@$(MAKE) -C gps runtest --no-print-directory
+	@$(MAKE) -C ecdsa runtest --no-print-directory
 	
 .PHONY: clean
 clean:
@@ -39,3 +45,6 @@ clean:
 	@$(MAKE) -C schnorr clean --no-print-directory	
 	@$(MAKE) -C fa3x clean --no-print-directory	
 	@$(MAKE) -C ffs clean --no-print-directory	
+	@$(MAKE) -C gq clean --no-print-directory
+	@$(MAKE) -C gps clean --no-print-directory	
+	@$(MAKE) -C ecdsa clean --no-print-directory	

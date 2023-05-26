@@ -13,7 +13,7 @@
 _Bool benchmark_round(size_t N, double *t_prov, double *t_ver)
 {
         struct controller_params params = {0};
-        struct member_params a_params = {0}, b_params = {0};
+        struct member_keys a_params = {0}, b_params = {0};
         fa3x_key_t vr = {0}, pr = {0}, ra = {0}, rb = {0};
         fa3x_key_t in1 = {0}, in2 = {0};
 

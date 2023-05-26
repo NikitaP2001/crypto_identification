@@ -11,7 +11,7 @@
 START_TEST(rnd_hash_valid)
 {
         struct controller_params params = {0};
-        struct member_params a_params = {0}, b_params = {0};
+        struct member_keys a_params = {0}, b_params = {0};
         fa3x_key_t vr = {0}, pr = {0}, r_a = {0}, r_b = {0};
         fa3x_controller_init(&params, 100);
 
@@ -30,7 +30,7 @@ END_TEST
 START_TEST(rnd_hash_invalid)
 {
         struct controller_params params = {0};
-        struct member_params a_params = {0}, b_params = {0};
+        struct member_keys a_params = {0}, b_params = {0};
         fa3x_key_t vr = {0}, pr = {0}, r_a = {0}, r_b = {0};
         fa3x_controller_init(&params, 100);
 
@@ -52,7 +52,7 @@ END_TEST
 START_TEST(auth_true)
 {
         struct controller_params params = {0};
-        struct member_params a_params = {0}, b_params = {0};
+        struct member_keys a_params = {0}, b_params = {0};
         fa3x_key_t vr = {0}, pr = {0}, r = {0};
         fa3x_key_t in1 = {0}, in2 = {0};
         fa3x_controller_init(&params, 100);
@@ -73,7 +73,7 @@ END_TEST
 START_TEST(auth_wrongid_prover)
 {
         struct controller_params params = {0};
-        struct member_params a_params = {0}, b_params = {0};
+        struct member_keys a_params = {0}, b_params = {0};
         fa3x_key_t vr = {0}, pr = {0}, r = {0};
         fa3x_key_t in1 = {0}, in2 = {0};
         fa3x_controller_init(&params, 100);
@@ -95,7 +95,7 @@ END_TEST
 START_TEST(auth_wrongid_verifier)
 {
         struct controller_params params = {0};
-        struct member_params a_params = {0}, b_params = {0};
+        struct member_keys a_params = {0}, b_params = {0};
         fa3x_key_t vr = {0}, pr = {0}, r = {0};
         fa3x_key_t in1 = {0}, in2 = {0};
         fa3x_controller_init(&params, 100);

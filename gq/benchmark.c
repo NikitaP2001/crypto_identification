@@ -16,7 +16,7 @@ _Bool benchmark_round(size_t N, double *t_prov, double *t_ver)
         mpz_init(c);
         mpz_init(z);
         struct gq_params t_params = {0};        
-        struct member_params m_params = {0};
+        struct member_keys m_params = {0};
 
         assert(gq_init(&t_params, N));
         gq_keys_create(&t_params, &m_params);

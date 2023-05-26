@@ -49,7 +49,7 @@ static void fa3x_hash_superpos(fa3x_key_t result, const fa3x_block x, size_t pow
 }
 
 
-_Bool fa3x_controller_add_memeber(struct controller_params *cparams, struct member_params *mparams)
+_Bool fa3x_controller_add_memeber(struct controller_params *cparams, struct member_keys *mparams)
 {
         if (cparams->member_count + 1 < cparams->N) {
                 mparams->N = cparams->N;
@@ -80,7 +80,7 @@ void fa3x_member_hash(fa3x_key_t result, const fa3x_key_t left, const fa3x_key_t
 }
 
 
-void fa3x_member_in(struct member_params *params, fa3x_key_t r, fa3x_key_t in1, fa3x_key_t in2)
+void fa3x_member_in(struct member_keys *params, fa3x_key_t r, fa3x_key_t in1, fa3x_key_t in2)
 {
         fa3x_block temp = {0}; 
         size_t n_a = 0;

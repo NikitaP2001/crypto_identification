@@ -1,8 +1,9 @@
-SRC = benchmark.c gps.c
-TSRC = gps.c test.c
+SRC = benchmark.c ecdsa.c
+TSRC = ecdsa.c test.c
 OBJ = $(SRC:%.c=%.o)
 TOBJ = $(TSRC:%.c=%.o)
 
+CFLAGS += -mrdseed
 LDLIBS += -lgmptools -lgmp
 
 %.o: %.c
@@ -20,13 +21,13 @@ test: $(TOBJ)
 	$(LD) -o $@ $^ $(LDLIBS) $(LDFLAGS) 
 	
 .PHONY: memtest
-memtest: 
+memtest:
 	$(DRMEM) $(LOG_DIR) -- test.exe
 	
 .PHONY: runtest
-runtest: 
+runtest:
 	@-./test.exe
-	
+
 .PHONY: clean
 clean:
 	@$(RM) bench.exe

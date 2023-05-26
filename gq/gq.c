@@ -122,7 +122,7 @@ _Bool gq_init(struct gq_params *params, size_t bit_size)
         return false;
 }
 
-void gq_keys_create(struct gq_params *params, struct member_params *mparams)
+void gq_keys_create(struct gq_params *params, struct member_keys *mparams)
 {
         mpz_init(mparams->x);
         mpz_init(mparams->y);
@@ -134,14 +134,14 @@ void gq_keys_create(struct gq_params *params, struct member_params *mparams)
 }
 
 
-void gq_commitment(const struct member_params *params, mpz_t a, mpz_t r)
+void gq_commitment(const struct member_keys *params, mpz_t a, mpz_t r)
 {
         gmpt_rndmod(r, params->n);
         mpz_powm(a, r, params->e, params->n);
 }
 
 
-void gq_solve(const struct member_params *params, mpz_t z, const mpz_t r, const mpz_t c)
+void gq_solve(const struct member_keys *params, mpz_t z, const mpz_t r, const mpz_t c)
 {
         mpz_powm(z, params->x, c, params->n);
         mpz_mul(z, z, r);
@@ -169,7 +169,7 @@ _Bool gq_verify(const mpz_t z, const mpz_t e, const mpz_t a, mpz_t y, const mpz_
 }
 
 
-void gq_keys_destroy(struct member_params *params)
+void gq_keys_destroy(struct member_keys *params)
 {
         mpz_clear(params->x);
         mpz_clear(params->y);

@@ -69,17 +69,17 @@ static const char *domain_g_3072 = "23672204305982296227550746248050612393350155
 _Bool schnorr_init(struct schnorr_params *params, size_t bit_size)
 {
         switch (bit_size) {
-        case 1024:
+        case DSA_L_1024:
                 mpz_init_set_str(params->p, domain_p_1024, 10);
                 mpz_init_set_str(params->q, domain_q_1024, 10);
                 mpz_init_set_str(params->g, domain_g_1024, 10);
                 return true;
-        case 2048:
+        case DSA_L_2048:
                 mpz_init_set_str(params->p, domain_p_2048, 10);
                 mpz_init_set_str(params->q, domain_q_2048, 10);
                 mpz_init_set_str(params->g, domain_g_2048, 10);
                 return true;
-        case 3072:
+        case DSA_L_3072:
                 mpz_init_set_str(params->p, domain_p_3072, 10);
                 mpz_init_set_str(params->q, domain_q_3072, 10);
                 mpz_init_set_str(params->g, domain_g_3072, 10);
