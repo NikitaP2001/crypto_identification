@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdlib.h>
 #include <gmp.h>
 
@@ -146,6 +147,32 @@ START_TEST(preprocess)
 }
 END_TEST
 
+START_TEST(preproc_coupon)
+{
+        mpz_t x, r, s, v;
+        mpz_init(x);
+        mpz_init(r);
+        mpz_init(s);
+        mpz_init(v);
+
+        struct schnorr_params params = {0};
+        gps_init(&params, GPS_L_1024);
+
+        gps_load_keys(s, v, &params);
+
+        gps_load_coupon(&params, x, r);
+
+        mpz_powm(params.g, params.g, r, params.p);
+        ck_assert_int_eq(mpz_cmp(params.g, x), 0);
+
+        gps_free(&params);
+        mpz_clear(x);
+        mpz_clear(r);
+        mpz_clear(s);
+        mpz_clear(v);
+}
+END_TEST
+
 START_TEST(sign_e)
 {
         mpz_t s, v, x, r, e, y;
@@ -182,8 +209,10 @@ START_TEST(sign_e)
 END_TEST
 
 #define VERIFY_TIMES 10
-START_TEST(verify_true)
+
+static _Bool test_verify(size_t times, size_t keysize, _Bool use_coupon, _Bool fake)
 {
+        _Bool result = true;
         mpz_t s, v, x, r, e, y, x_ver;
         mpz_init(s);
         mpz_init(v);
@@ -194,19 +223,29 @@ START_TEST(verify_true)
         mpz_init(y);
 
         struct schnorr_params params = {0};
-        gps_init(&params, GPS_L_1024);
+        gps_init(&params, keysize);
 
-        gps_user_keys(s, v, &params);
+        if (use_coupon)
+                gps_load_keys(s, v, &params);
+        else
+                gps_user_keys(s, v, &params);
 
-        for (int i = 0; i < VERIFY_TIMES; i++) {
-                gps_preprocess(&params, x, r);
+        for (size_t i = 0; i < times; i++) {
+
+                if (fake)
+                        gmpt_random(s, mpz_sizeinbase(s, 2));
+
+                if (use_coupon)
+                        gps_load_coupon(&params, x, r);
+                else
+                        gps_preprocess(&params, x, r);
                 
                 gmpt_rndmod(e, params.q);
 
                 gps_sign(y, r, s, e);
                 
                 gps_verify(&params, x_ver, y, v, e);
-                ck_assert_int_eq(mpz_cmp(x, x_ver) , 0);
+                result = mpz_cmp(x, x_ver) == 0;
         }
         gps_free(&params);
 
@@ -217,45 +256,28 @@ START_TEST(verify_true)
         mpz_clear(r);
         mpz_clear(e);
         mpz_clear(y);
+        return result;
+}
+
+START_TEST(verify_true)
+{
+        ck_assert(test_verify(VERIFY_TIMES, GPS_L_1024, false, false));
+        ck_assert(test_verify(VERIFY_TIMES, GPS_L_1024, true, false));
+        ck_assert(test_verify(VERIFY_TIMES, GPS_L_2048, false, false));
+        ck_assert(test_verify(VERIFY_TIMES, GPS_L_2048, true, false));
+        ck_assert(test_verify(VERIFY_TIMES, GPS_L_3072, false, false));
+        ck_assert(test_verify(VERIFY_TIMES, GPS_L_3072, true, false));
 }
 END_TEST
 
 START_TEST(verify_fakes)
 {
-        mpz_t s, v, x, r, e, y, x_ver;
-        mpz_init(s);
-        mpz_init(v);
-        mpz_init(x);
-        mpz_init(x_ver);
-        mpz_init(r);
-        mpz_init(e);
-        mpz_init(y);
-
-        struct schnorr_params params = {0};
-        gps_init(&params, GPS_L_1024);
-
-        gps_user_keys(s, v, &params);
-
-        for (int i = 0; i < VERIFY_TIMES; i++) {
-                gmpt_random(s, mpz_sizeinbase(s, 2));
-                gps_preprocess(&params, x, r);
-                
-                gmpt_rndmod(e, params.q);
-
-                gps_sign(y, r, s, e);
-                
-                gps_verify(&params, x_ver, y, v, e);
-                ck_assert_int_ne(mpz_cmp(x, x_ver) , 0);
-        }
-        gps_free(&params);
-
-        mpz_clear(v);
-        mpz_clear(s);
-        mpz_clear(x);
-        mpz_clear(x_ver);
-        mpz_clear(r);
-        mpz_clear(e);
-        mpz_clear(y);
+        ck_assert(test_verify(VERIFY_TIMES, GPS_L_1024, false, true));
+        ck_assert(test_verify(VERIFY_TIMES, GPS_L_1024, true, true));
+        ck_assert(test_verify(VERIFY_TIMES, GPS_L_2048, false, true));
+        ck_assert(test_verify(VERIFY_TIMES, GPS_L_2048, true, true));
+        ck_assert(test_verify(VERIFY_TIMES, GPS_L_3072, false, true));
+        ck_assert(test_verify(VERIFY_TIMES, GPS_L_3072, true, true));
 }
 END_TEST
 
@@ -274,6 +296,7 @@ Suite *gps_suite()
         tcase_add_test(tc_core, domain_p_3072);
         tcase_add_test(tc_core, domain_q_3072);
         tcase_add_test(tc_core, preprocess);
+        tcase_add_test(tc_core, preproc_coupon);
         tcase_add_test(tc_core, sign_e);
         tcase_add_test(tc_core, verify_true);
         tcase_add_test(tc_core, verify_fakes);

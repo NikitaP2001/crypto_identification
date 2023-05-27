@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
+#include <string.h>
 
 #include <sys/time.h>
 
@@ -23,10 +24,16 @@ void benchmark_round(size_t keysize, double *t_proover, double *t_verifier)
         gps_init(&params, keysize);
 
         gps_user_keys(s, v, &params);
+        gmp_printf("s: %Zd\n", s);
+        gmp_printf("v: %Zd\n", v);
 
         double time;
         /* assume this is precomputed on coupon*/
+
         gps_preprocess(&params, x, r);
+        gmp_printf("x: %Zd\n", x);
+        gmp_printf("r: %Zd\n", r);
+
         /* A->B: v, x */
         /* B generates challenge e */
         time = get_current_time();
@@ -69,27 +76,34 @@ void benchmark(size_t times, size_t keysize, double *t_proover, double *t_verifi
         *t_verifier /= times;
 }
 
-int main()
+int main(int argc, char *argv[])
 {
         double time_prov, time_verify;
 
-        benchmark(100, GPS_L_1024, &time_prov, &time_verify);
+        if (argc > 1 && strcmp(argv[1], "round") == 0) {
+                benchmark_round(GPS_L_1024, &time_prov, &time_verify);
+                benchmark_round(GPS_L_2048, &time_prov, &time_verify);
+                benchmark_round(GPS_L_3072, &time_prov, &time_verify);
+        } else {
+                benchmark(100, GPS_L_1024, &time_prov, &time_verify);
 
-        printf("Keysize %d \n", GPS_L_1024);
-        printf("\tTotal prover time: %.7f sec\n", time_prov);
-        printf("\tTotal verifier time: %.7f sec\n", time_verify);
+                printf("Keysize %d \n", GPS_L_1024);
+                printf("\tTotal prover time: %.7f sec\n", time_prov);
+                printf("\tTotal verifier time: %.7f sec\n", time_verify);
 
-        benchmark(100, GPS_L_2048, &time_prov, &time_verify);
+                benchmark(100, GPS_L_2048, &time_prov, &time_verify);
 
-        printf("\n\rKeysize %d \n", GPS_L_2048);
-        printf("\tTotal prover time: %.7f sec\n", time_prov);
-        printf("\tTotal verifier time: %.7f sec\n", time_verify);
+                printf("\n\rKeysize %d \n", GPS_L_2048);
+                printf("\tTotal prover time: %.7f sec\n", time_prov);
+                printf("\tTotal verifier time: %.7f sec\n", time_verify);
 
-        benchmark(100, GPS_L_3072, &time_prov, &time_verify);
+                benchmark(100, GPS_L_3072, &time_prov, &time_verify);
 
-        printf("\n\rKeysize %d \n", GPS_L_3072);
-        printf("\tTotal prover time: %.7f sec\n", time_prov);
-        printf("\tTotal verifier time: %.7f sec\n", time_verify);
+                printf("\n\rKeysize %d \n", GPS_L_3072);
+                printf("\tTotal prover time: %.7f sec\n", time_prov);
+                printf("\tTotal verifier time: %.7f sec\n", time_verify);
+        }
+        
 
         exit(0);
 }

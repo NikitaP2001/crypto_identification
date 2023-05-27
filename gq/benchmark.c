@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
+#include <string.h>
 
 #include <sys/time.h>
 
@@ -58,24 +59,27 @@ void benchmark(size_t N, size_t times, double *t_prov, double *t_ver)
         *t_ver /= times;
 }
 
-int main()
+int main(int argc, char *argv[])
 {
         double t_prov = 0, t_ver = 0;
+        if (argc > 1 && strcmp(argv[1], "round") == 0) {
+                benchmark_round(GQ_NLEN_3072, &t_prov, &t_ver);
+        } else {
+                benchmark(GQ_NLEN_1024, 100, &t_prov, &t_ver);
+                printf("N = %d", GQ_NLEN_1024);
+                printf("\n\ravg time prove: %.7f\n", t_prov);
+                printf("\n\ravg time verify: %.7f\n\n", t_ver);
 
-        benchmark(GQ_NLEN_1024, 100, &t_prov, &t_ver);
-        printf("N = %d", GQ_NLEN_1024);
-        printf("\n\ravg time prove: %.7f\n", t_prov);
-        printf("\n\ravg time verify: %.7f\n\n", t_ver);
+                benchmark(GQ_NLEN_2048, 100, &t_prov, &t_ver);
+                printf("N = %d", GQ_NLEN_2048);
+                printf("\n\ravg time prove: %.7f\n", t_prov);
+                printf("\n\ravg time verify: %.7f\n\n", t_ver);
 
-        benchmark(GQ_NLEN_2048, 100, &t_prov, &t_ver);
-        printf("N = %d", GQ_NLEN_2048);
-        printf("\n\ravg time prove: %.7f\n", t_prov);
-        printf("\n\ravg time verify: %.7f\n\n", t_ver);
-
-        benchmark(GQ_NLEN_3072, 100, &t_prov, &t_ver);
-        printf("N = %d", GQ_NLEN_3072);
-        printf("\n\ravg time prove: %.7f\n", t_prov);
-        printf("\n\ravg time verify: %.7f\n\n", t_ver);
+                benchmark(GQ_NLEN_3072, 100, &t_prov, &t_ver);
+                printf("N = %d", GQ_NLEN_3072);
+                printf("\n\ravg time prove: %.7f\n", t_prov);
+                printf("\n\ravg time verify: %.7f\n\n", t_ver);
+        }
 
         exit(0);
 }

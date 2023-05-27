@@ -1,6 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <assert.h>
+#include <string.h>
 
 #include <sys/time.h>
 
@@ -69,27 +70,36 @@ void benchmark(size_t times, size_t keysize, double *t_proover, double *t_verifi
         *t_verifier /= times;
 }
 
-int main()
+int main(int argc, char *argv[])
 {
-        double time_prov, time_verify;
+        double time_prov = 0, time_verify = 0;
 
-        benchmark(100, DSA_L_1024, &time_prov, &time_verify);
+        /* execute just one round, for power/memory profiling */
+        if (argc > 1 && strcmp(argv[1], "round") == 0) {
+                benchmark_round(DSA_L_3072, &time_prov, &time_verify);
+        } else {
 
-        printf("Keysize %d \n", DSA_L_1024);
-        printf("\tTotal prover time: %.7f sec\n", time_prov);
-        printf("\tTotal verifier time: %.7f sec\n", time_verify);
+                benchmark(100, DSA_L_1024, &time_prov, &time_verify);
 
-        benchmark(100, DSA_L_2048, &time_prov, &time_verify);
+                printf("Keysize %d \n", DSA_L_1024);
+                printf("\tTotal prover time: %.7f sec\n", time_prov);
+                printf("\tTotal verifier time: %.7f sec\n", time_verify);
 
-        printf("\n\rKeysize %d \n", DSA_L_2048);
-        printf("\tTotal prover time: %.7f sec\n", time_prov);
-        printf("\tTotal verifier time: %.7f sec\n", time_verify);
+                benchmark(100, DSA_L_2048, &time_prov, &time_verify);
 
-        benchmark(100, DSA_L_3072, &time_prov, &time_verify);
+                printf("\n\rKeysize %d \n", DSA_L_2048);
+                printf("\tTotal prover time: %.7f sec\n", time_prov);
+                printf("\tTotal verifier time: %.7f sec\n", time_verify);
 
-        printf("\n\rKeysize %d \n", DSA_L_3072);
-        printf("\tTotal prover time: %.7f sec\n", time_prov);
-        printf("\tTotal verifier time: %.7f sec\n", time_verify);
+                benchmark(100, DSA_L_3072, &time_prov, &time_verify);
+
+                printf("\n\rKeysize %d \n", DSA_L_3072);
+                printf("\tTotal prover time: %.7f sec\n", time_prov);
+                printf("\tTotal verifier time: %.7f sec\n", time_verify);
+
+        }
+
+        
 
         exit(0);
 }
