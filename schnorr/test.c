@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdlib.h>
 #include <gmp.h>
 
@@ -170,8 +171,10 @@ START_TEST(sign_e)
 END_TEST
 
 #define VERIFY_TIMES 10
-START_TEST(verify_true)
+
+static _Bool test_verify(size_t times, size_t keysize, _Bool use_coupon, _Bool fake)
 {
+        _Bool result = true;
         mpz_t s, v, x, r, e, y, x_ver;
         mpz_init(s);
         mpz_init(v);
@@ -182,11 +185,18 @@ START_TEST(verify_true)
         mpz_init(y);
 
         struct schnorr_params params = {0};
-        schnorr_init(&params, DSA_L_1024);
+        schnorr_init(&params, keysize);
 
-        schnorr_user_keys(s, v, &params);
+        if (use_coupon)
+                schnorr_load_keys(s, v, &params);
+        else
+                schnorr_user_keys(s, v, &params);
 
-        for (int i = 0; i < VERIFY_TIMES; i++) {
+        for (size_t i = 0; i < times; i++) {
+
+                if (fake)
+                        gmpt_random(s, mpz_sizeinbase(s, 2));
+
                 schnorr_preprocess(&params, x, r);
                 
                 gmpt_rndmod(e, params.q);
@@ -194,7 +204,7 @@ START_TEST(verify_true)
                 schnorr_sign(&params, y, r, s, e);
                 
                 schnorr_verify(&params, x_ver, y, v, e);
-                ck_assert_int_eq(mpz_cmp(x, x_ver) , 0);
+                result = mpz_cmp(x, x_ver) == 0;
         }
         schnorr_free(&params);
 
@@ -205,45 +215,28 @@ START_TEST(verify_true)
         mpz_clear(r);
         mpz_clear(e);
         mpz_clear(y);
+        return result;
+}
+
+START_TEST(verify_true)
+{
+        ck_assert(test_verify(VERIFY_TIMES, DSA_L_1024, false, false));
+        ck_assert(test_verify(VERIFY_TIMES, DSA_L_1024, true, false));
+        ck_assert(test_verify(VERIFY_TIMES, DSA_L_2048, false, false));
+        ck_assert(test_verify(VERIFY_TIMES, DSA_L_2048, true, false));
+        ck_assert(test_verify(VERIFY_TIMES, DSA_L_3072, false, false));
+        ck_assert(test_verify(VERIFY_TIMES, DSA_L_3072, true, false));
 }
 END_TEST
 
 START_TEST(verify_fakes)
 {
-        mpz_t s, v, x, r, e, y, x_ver;
-        mpz_init(s);
-        mpz_init(v);
-        mpz_init(x);
-        mpz_init(x_ver);
-        mpz_init(r);
-        mpz_init(e);
-        mpz_init(y);
-
-        struct schnorr_params params = {0};
-        schnorr_init(&params, DSA_L_1024);
-
-        schnorr_user_keys(s, v, &params);
-
-        for (int i = 0; i < VERIFY_TIMES; i++) {
-                gmpt_random(s, mpz_sizeinbase(s, 2));
-                schnorr_preprocess(&params, x, r);
-                
-                gmpt_rndmod(e, params.q);
-
-                schnorr_sign(&params, y, r, s, e);
-                
-                schnorr_verify(&params, x_ver, y, v, e);
-                ck_assert_int_ne(mpz_cmp(x, x_ver) , 0);
-        }
-        schnorr_free(&params);
-
-        mpz_clear(v);
-        mpz_clear(s);
-        mpz_clear(x);
-        mpz_clear(x_ver);
-        mpz_clear(r);
-        mpz_clear(e);
-        mpz_clear(y);
+        ck_assert(!test_verify(VERIFY_TIMES, DSA_L_1024, false, true));
+        ck_assert(!test_verify(VERIFY_TIMES, DSA_L_1024, true, true));
+        ck_assert(!test_verify(VERIFY_TIMES, DSA_L_2048, false, true));
+        ck_assert(!test_verify(VERIFY_TIMES, DSA_L_2048, true, true));
+        ck_assert(!test_verify(VERIFY_TIMES, DSA_L_3072, false, true));
+        ck_assert(!test_verify(VERIFY_TIMES, DSA_L_3072, true, true));
 }
 END_TEST
 

@@ -272,12 +272,12 @@ END_TEST
 
 START_TEST(verify_fakes)
 {
-        ck_assert(test_verify(VERIFY_TIMES, GPS_L_1024, false, true));
-        ck_assert(test_verify(VERIFY_TIMES, GPS_L_1024, true, true));
-        ck_assert(test_verify(VERIFY_TIMES, GPS_L_2048, false, true));
-        ck_assert(test_verify(VERIFY_TIMES, GPS_L_2048, true, true));
-        ck_assert(test_verify(VERIFY_TIMES, GPS_L_3072, false, true));
-        ck_assert(test_verify(VERIFY_TIMES, GPS_L_3072, true, true));
+        ck_assert(!test_verify(VERIFY_TIMES, GPS_L_1024, false, true));
+        ck_assert(!test_verify(VERIFY_TIMES, GPS_L_1024, true, true));
+        ck_assert(!test_verify(VERIFY_TIMES, GPS_L_2048, false, true));
+        ck_assert(!test_verify(VERIFY_TIMES, GPS_L_2048, true, true));
+        ck_assert(!test_verify(VERIFY_TIMES, GPS_L_3072, false, true));
+        ck_assert(!test_verify(VERIFY_TIMES, GPS_L_3072, true, true));
 }
 END_TEST
 

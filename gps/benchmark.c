@@ -9,7 +9,7 @@
 #include "gps.h"
 
 
-void benchmark_round(size_t keysize, double *t_proover, double *t_verifier)
+void benchmark_round(size_t keysize, double *t_prover, double *t_verifier)
 {
         mpz_t s, v, x, x_ver, r, e, y;
         mpz_init(s);
@@ -23,16 +23,11 @@ void benchmark_round(size_t keysize, double *t_proover, double *t_verifier)
         struct schnorr_params params = {0};
         gps_init(&params, keysize);
 
-        gps_user_keys(s, v, &params);
-        gmp_printf("s: %Zd\n", s);
-        gmp_printf("v: %Zd\n", v);
+        gps_load_keys(s, v, &params);
 
-        double time;
-        /* assume this is precomputed on coupon*/
-
-        gps_preprocess(&params, x, r);
-        gmp_printf("x: %Zd\n", x);
-        gmp_printf("r: %Zd\n", r);
+        double time = get_current_time();
+        gps_load_coupon(&params, x, r);
+        *t_prover = get_current_time() - time;
 
         /* A->B: v, x */
         /* B generates challenge e */
@@ -42,7 +37,7 @@ void benchmark_round(size_t keysize, double *t_proover, double *t_verifier)
         /* B->A: e */
         time = get_current_time();
         gps_sign(y, r, s, e);
-        *t_proover += get_current_time() - time;
+        *t_prover += get_current_time() - time;
         /* A->B: y */
         time = get_current_time();
         gps_verify(&params, x_ver, y, v, e);
@@ -81,8 +76,6 @@ int main(int argc, char *argv[])
         double time_prov, time_verify;
 
         if (argc > 1 && strcmp(argv[1], "round") == 0) {
-                benchmark_round(GPS_L_1024, &time_prov, &time_verify);
-                benchmark_round(GPS_L_2048, &time_prov, &time_verify);
                 benchmark_round(GPS_L_3072, &time_prov, &time_verify);
         } else {
                 benchmark(100, GPS_L_1024, &time_prov, &time_verify);

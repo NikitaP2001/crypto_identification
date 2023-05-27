@@ -4,6 +4,7 @@ struct schnorr_params {
         mpz_t p;
         mpz_t q;
         mpz_t g;
+        size_t bitsize;
 };
 
 #define DSA_L_1024 1024
@@ -20,6 +21,8 @@ void schnorr_free(struct schnorr_params *params);
 
 /* generate private key s and public key v from s */
 void schnorr_user_keys(mpz_t s, mpz_t v, struct schnorr_params *params);
+
+void schnorr_load_keys(mpz_t s, mpz_t v, struct schnorr_params *params);
 
 void schnorr_preprocess(struct schnorr_params *params, mpz_t x, mpz_t r);
 

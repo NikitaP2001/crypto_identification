@@ -133,21 +133,19 @@ static const char *coupon_r_3072 = "11424805904505035960906952623806754772925207
 
 _Bool gps_init(struct schnorr_params *params, size_t bit_size)
 {
+        params->bitsize = bit_size;
         switch (bit_size) {
         case GPS_L_1024:
-                params->bitsize = GPS_L_1024;
                 mpz_init_set_str(params->p, domain_p_1024, 10);
                 mpz_init_set_str(params->q, domain_q_1024, 10);
                 mpz_init_set_str(params->g, domain_g_1024, 10);
                 return true;
         case GPS_L_2048:
-                params->bitsize = GPS_L_2048;
                 mpz_init_set_str(params->p, domain_p_2048, 10);
                 mpz_init_set_str(params->q, domain_q_2048, 10);
                 mpz_init_set_str(params->g, domain_g_2048, 10);
                 return true;
         case GPS_L_3072:
-                params->bitsize = GPS_L_3072;
                 mpz_init_set_str(params->p, domain_p_3072, 10);
                 mpz_init_set_str(params->q, domain_q_3072, 10);
                 mpz_init_set_str(params->g, domain_g_3072, 10);
