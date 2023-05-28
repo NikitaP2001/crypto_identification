@@ -59,11 +59,20 @@ void benchmark(size_t N, size_t times, double *t_prov, double *t_ver)
         *t_ver /= times;
 }
 
+
 int main(int argc, char *argv[])
 {
         double t_prov = 0, t_ver = 0;
-        if (argc > 1 && strcmp(argv[1], "round") == 0) {
+        if (argc > 1 && strcmp(argv[1], "runempty") == 0) {
+
+                print_private_usage();
+
+        } else if (argc > 1 && strcmp(argv[1], "round") == 0) {
+
                 benchmark_round(GQ_NLEN_3072, &t_prov, &t_ver);
+
+                print_private_usage();
+
         } else {
                 benchmark(GQ_NLEN_1024, 100, &t_prov, &t_ver);
                 printf("N = %d", GQ_NLEN_1024);

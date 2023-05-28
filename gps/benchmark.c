@@ -75,8 +75,16 @@ int main(int argc, char *argv[])
 {
         double time_prov, time_verify;
 
-        if (argc > 1 && strcmp(argv[1], "round") == 0) {
+        if (argc > 1 && strcmp(argv[1], "runempty") == 0) {
+
+                print_private_usage();
+
+        } else if (argc > 1 && strcmp(argv[1], "round") == 0) {
+
                 benchmark_round(GPS_L_3072, &time_prov, &time_verify);
+
+                print_private_usage();
+
         } else {
                 benchmark(100, GPS_L_1024, &time_prov, &time_verify);
 

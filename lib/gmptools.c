@@ -1,7 +1,12 @@
 #include <stdbool.h>
 #include <stdlib.h>
+#include <assert.h>
+#include <stdio.h>
 #include <x86intrin.h>
 #include <sys/time.h>
+
+#include <windows.h>
+#include <psapi.h>
 
 #include "gmptools.h"
 
@@ -76,4 +81,12 @@ double get_current_time()
         double nsec = (double)res.tv_nsec * 1e-9;
         double time = (double)res.tv_sec + nsec;
 	return time;
+}
+
+void print_private_usage()
+{
+        PROCESS_MEMORY_COUNTERS_EX memc = {0};
+        assert(GetProcessMemoryInfo(GetCurrentProcess(), 
+        (PROCESS_MEMORY_COUNTERS*)&memc, sizeof(memc)));
+        printf("%llu\n", memc.PrivateUsage);
 }

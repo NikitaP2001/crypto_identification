@@ -21,4 +21,6 @@ void gmpt_sha256(mpz_t x, struct sha256_state *hash);
 
 double get_current_time();
 
+void print_private_usage();
+
 #endif /* _GMPTOOLS_H_ */

@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 #include <assert.h>
 
 #include <gmptools.h>
@@ -56,24 +57,35 @@ void benchmark(size_t bit_size, size_t times, double *t_prov, double *t_ver)
         *t_ver /= times;
 }
 
-int main()
+int main(int argc, char *argv[])
 {
         double t_prov = 0, t_ver = 0;
+        if (argc > 1 && strcmp(argv[1], "runempty") == 0) {
 
-        benchmark(FFS_NLEN_1024, 100, &t_prov, &t_ver);
-        printf("N = %d", FFS_NLEN_1024);
-        printf("\n\ravg time prove: %.7f\n", t_prov);
-        printf("\n\ravg time verify: %.7f\n\n", t_ver);
+                print_private_usage();
 
-        benchmark(FFS_NLEN_2048, 100, &t_prov, &t_ver);
-        printf("N = %d", FFS_NLEN_2048);
-        printf("\n\ravg time prove: %.7f\n", t_prov);
-        printf("\n\ravg time verify: %.7f\n\n", t_ver);
+        } else if (argc > 1 && strcmp(argv[1], "round") == 0) {
 
-        benchmark(FFS_NLEN_3072, 100, &t_prov, &t_ver);
-        printf("N = %d", FFS_NLEN_3072);
-        printf("\n\ravg time prove: %.7f\n", t_prov);
-        printf("\n\ravg time verify: %.7f\n\n", t_ver);
+                benchmark_round(&t_prov, &t_ver, FFS_NLEN_3072);
+
+                print_private_usage();
+
+        } else {
+                benchmark(FFS_NLEN_1024, 100, &t_prov, &t_ver);
+                printf("N = %d", FFS_NLEN_1024);
+                printf("\n\ravg time prove: %.7f\n", t_prov);
+                printf("\n\ravg time verify: %.7f\n\n", t_ver);
+
+                benchmark(FFS_NLEN_2048, 100, &t_prov, &t_ver);
+                printf("N = %d", FFS_NLEN_2048);
+                printf("\n\ravg time prove: %.7f\n", t_prov);
+                printf("\n\ravg time verify: %.7f\n\n", t_ver);
+
+                benchmark(FFS_NLEN_3072, 100, &t_prov, &t_ver);
+                printf("N = %d", FFS_NLEN_3072);
+                printf("\n\ravg time prove: %.7f\n", t_prov);
+                printf("\n\ravg time verify: %.7f\n\n", t_ver);
+        }
 
         exit(0);
 }

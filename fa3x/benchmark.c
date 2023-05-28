@@ -48,16 +48,30 @@ void benchmark(size_t N, size_t times, double *t_prov, double *t_ver)
         *t_ver /= times;
 }
 
-int main()
-{
-        for (int i = 10; i < 10e5; i *= 10) {
-                double t_prov = 0, t_ver = 0;         
 
-                benchmark(i, 100, &t_prov, &t_ver);
-                printf("N = %d", i);
-                printf("\n\ravg time prove: %.7f\n", t_prov);
-                printf("\n\ravg time verify: %.7f\n\n", t_ver);
+int main(int argc, char *argv[])
+{
+        double t_prov = 0, t_ver = 0;         
+        if (argc > 1 && strcmp(argv[1], "runempty") == 0) {
+
+                print_private_usage();
+
+        } else if (argc > 1 && strcmp(argv[1], "round") == 0) {
+
+                benchmark_round(10, &t_prov, &t_ver);
+
+                print_private_usage();
+
+        } else {
+                for (int i = 10; i < 10e5; i *= 10) {
+
+                        benchmark(i, 100, &t_prov, &t_ver);
+                        printf("N = %d", i);
+                        printf("\n\ravg time prove: %.7f\n", t_prov);
+                        printf("\n\ravg time verify: %.7f\n\n", t_ver);
+                }
         }
+        
         
 
         exit(0);
