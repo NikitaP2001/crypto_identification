@@ -109,7 +109,7 @@ START_TEST(params_n)
 }
 END_TEST
 
-static _Bool test_sign(size_t p, _Bool valid)
+static _Bool test_sign(size_t p, _Bool valid, _Bool ldkeys)
 {
         _Bool result = false;
         mpz_t e, s, r;
@@ -121,7 +121,10 @@ static _Bool test_sign(size_t p, _Bool valid)
 
         ecdsa_init(&params, p);
 
-        ecdsa_keys_create(&params, &keys);
+        if (ldkeys)
+                ecdsa_keys_load(&params, &keys);
+        else
+                ecdsa_keys_create(&params, &keys);
 
         gmpt_rndmod(e, params.p);
 
@@ -142,16 +145,22 @@ static _Bool test_sign(size_t p, _Bool valid)
 
 START_TEST(sign_valid)
 {
-        ck_assert(test_sign(ECDSA_P256, true));
-        ck_assert(test_sign(ECDSA_P384, true));
-        ck_assert(test_sign(ECDSA_P521, true));
+        ck_assert(test_sign(ECDSA_P256, true, false));
+        ck_assert(test_sign(ECDSA_P256, true, true));
+        ck_assert(test_sign(ECDSA_P384, true, false));
+        ck_assert(test_sign(ECDSA_P384, true, true));
+        ck_assert(test_sign(ECDSA_P521, true, false));
+        ck_assert(test_sign(ECDSA_P521, true, true));
 }
 
 START_TEST(sign_invalid)
 {
-        ck_assert(!test_sign(ECDSA_P256, false));
-        ck_assert(!test_sign(ECDSA_P384, false));
-        ck_assert(!test_sign(ECDSA_P521, false));
+        ck_assert(!test_sign(ECDSA_P256, false, false));
+        ck_assert(!test_sign(ECDSA_P256, false, true));
+        ck_assert(!test_sign(ECDSA_P384, false, false));
+        ck_assert(!test_sign(ECDSA_P384, false, true));
+        ck_assert(!test_sign(ECDSA_P521, false, false));
+        ck_assert(!test_sign(ECDSA_P521, false, true));
 }
 
 

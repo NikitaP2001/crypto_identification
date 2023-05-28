@@ -28,6 +28,7 @@ void benchmark_round(double *t_prov, double *t_ver, size_t bit_size)
 
                 time = get_current_time();
                 gmpt_random(E, params.k);
+                *t_ver += get_current_time() - time;
 
                 time = get_current_time();
                 ffs_solve(&mparams, Y, E, R, params.n);
@@ -72,19 +73,28 @@ int main(int argc, char *argv[])
 
         } else {
                 benchmark(FFS_NLEN_1024, 100, &t_prov, &t_ver);
+                t_prov *= 1e6;
+                t_ver *= 1e6;
                 printf("N = %d", FFS_NLEN_1024);
-                printf("\n\ravg time prove: %.7f\n", t_prov);
-                printf("\n\ravg time verify: %.7f\n\n", t_ver);
+                printf("\n\ravg time prove: %.1f\n", t_prov);
+                printf("\n\ravg time verify: %.1f\n\n", t_ver);
+                printf("\n\rtotal time: %.1f\n\n", t_ver + t_prov);
 
                 benchmark(FFS_NLEN_2048, 100, &t_prov, &t_ver);
+                t_prov *= 1e6;
+                t_ver *= 1e6;
                 printf("N = %d", FFS_NLEN_2048);
-                printf("\n\ravg time prove: %.7f\n", t_prov);
-                printf("\n\ravg time verify: %.7f\n\n", t_ver);
+                printf("\n\ravg time prove: %.1f\n", t_prov);
+                printf("\n\ravg time verify: %.1f\n\n", t_ver);
+                printf("\n\rtotal time: %.1f\n\n", t_ver + t_prov);
 
                 benchmark(FFS_NLEN_3072, 100, &t_prov, &t_ver);
+                t_prov *= 1e6;
+                t_ver *= 1e6;
                 printf("N = %d", FFS_NLEN_3072);
-                printf("\n\ravg time prove: %.7f\n", t_prov);
-                printf("\n\ravg time verify: %.7f\n\n", t_ver);
+                printf("\n\ravg time prove: %.1f\n", t_prov);
+                printf("\n\ravg time verify: %.1f\n\n", t_ver);
+                printf("\n\rtotal time: %.1f\n\n", t_ver + t_prov);
         }
 
         exit(0);

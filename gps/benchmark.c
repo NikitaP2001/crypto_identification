@@ -87,22 +87,29 @@ int main(int argc, char *argv[])
 
         } else {
                 benchmark(100, GPS_L_1024, &time_prov, &time_verify);
+                time_prov *= 1e6;
+                time_verify *= 1e6;
 
                 printf("Keysize %d \n", GPS_L_1024);
-                printf("\tTotal prover time: %.7f sec\n", time_prov);
-                printf("\tTotal verifier time: %.7f sec\n", time_verify);
+                printf("\tTotal prover time: %.1f sec\n", time_prov);
+                printf("\tTotal verifier time: %.1f sec\n", time_verify);
+                printf("\tTotal time: %.1f sec\n", time_verify + time_prov);
 
                 benchmark(100, GPS_L_2048, &time_prov, &time_verify);
-
+                time_prov *= 1e6;
+                time_verify *= 1e6;
                 printf("\n\rKeysize %d \n", GPS_L_2048);
-                printf("\tTotal prover time: %.7f sec\n", time_prov);
-                printf("\tTotal verifier time: %.7f sec\n", time_verify);
+                printf("\tTotal prover time: %.1f sec\n", time_prov);
+                printf("\tTotal verifier time: %.1f sec\n", time_verify);
+                printf("\tTotal time: %.1f sec\n", time_verify + time_prov);
 
                 benchmark(100, GPS_L_3072, &time_prov, &time_verify);
-
+                time_prov *= 1e6;
+                time_verify *= 1e6;
                 printf("\n\rKeysize %d \n", GPS_L_3072);
-                printf("\tTotal prover time: %.7f sec\n", time_prov);
-                printf("\tTotal verifier time: %.7f sec\n", time_verify);
+                printf("\tTotal prover time: %.1f sec\n", time_prov);
+                printf("\tTotal verifier time: %.1f sec\n", time_verify);
+                printf("\tTotal time: %.1f sec\n", time_verify + time_prov);
         }
         
 

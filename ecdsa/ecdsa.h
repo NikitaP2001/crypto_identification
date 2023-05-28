@@ -15,6 +15,8 @@ struct curve_point {
 
 struct ecdsa_params {
 
+        size_t bitsize;
+
         mpz_t n;
 
         /* a field size*/
@@ -40,6 +42,8 @@ struct member_keys {
 void ecdsa_init(struct ecdsa_params *params, size_t p);
 
 void ecdsa_keys_create(const struct ecdsa_params *params, struct member_keys *keys);
+
+void ecdsa_keys_load(const struct ecdsa_params *params, struct member_keys *keys);
 
 /* sign message e, to receive (r,s) signature */
 void ecdsa_sign(const struct ecdsa_params *params, const struct member_keys *keys, const mpz_t e, mpz_t r, mpz_t s);

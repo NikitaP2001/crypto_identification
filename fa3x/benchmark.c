@@ -42,6 +42,8 @@ _Bool benchmark_round(size_t N, double *t_prov, double *t_ver)
 
 void benchmark(size_t N, size_t times, double *t_prov, double *t_ver)
 {
+        *t_prov = 0;
+        *t_ver = 0;
         for (size_t i = 0; i < times; i++)
                 assert(benchmark_round(N, t_prov, t_ver));
         *t_prov /= times;
@@ -66,9 +68,12 @@ int main(int argc, char *argv[])
                 for (int i = 10; i < 10e5; i *= 10) {
 
                         benchmark(i, 100, &t_prov, &t_ver);
+                        t_prov *= 1e6;
+                        t_ver *= 1e6;
                         printf("N = %d", i);
-                        printf("\n\ravg time prove: %.7f\n", t_prov);
-                        printf("\n\ravg time verify: %.7f\n\n", t_ver);
+                        printf("\n\ravg time prove: %.1f\n", t_prov);
+                        printf("\n\ravg time verify: %.1f\n\n", t_ver);
+                        printf("\n\rtotal time: %.1f\n\n", t_ver + t_prov);
                 }
         }
         

@@ -6,7 +6,7 @@ AR = @x86_64-w64-mingw32-ar
 RM = @-rm -rf
 
 
-CFLAGS = -c -g -std=c99 -Wall -Wextra -Wundef -pedantic -I $(LIBDIR)
+CFLAGS = -c -O3 -std=c99 -Wall -Wextra -Wundef -pedantic -I $(LIBDIR)
 LDFLAGS = -static -fstack-protector -L $(LIBDIR)
 LDLIBS = -lcheck
 

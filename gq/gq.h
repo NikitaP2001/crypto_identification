@@ -8,6 +8,8 @@
 
 struct gq_params {
 
+        size_t bitsize;
+
         mpz_t n;
 
         mpz_t p;
@@ -26,6 +28,8 @@ struct member_keys {
 _Bool gq_init(struct gq_params *params, size_t bit_size);
 
 void gq_keys_create(struct gq_params *params, struct member_keys *mparams);
+
+void gq_load_keys(struct gq_params *params, struct member_keys *mparams);
 
 void gq_commitment(const struct member_keys *params, mpz_t a, mpz_t r);
 

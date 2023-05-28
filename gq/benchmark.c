@@ -20,7 +20,7 @@ _Bool benchmark_round(size_t N, double *t_prov, double *t_ver)
         struct member_keys m_params = {0};
 
         assert(gq_init(&t_params, N));
-        gq_keys_create(&t_params, &m_params);
+        gq_load_keys(&t_params, &m_params);
 
         double time = get_current_time();
         gq_commitment(&m_params, a, r);
@@ -75,19 +75,28 @@ int main(int argc, char *argv[])
 
         } else {
                 benchmark(GQ_NLEN_1024, 100, &t_prov, &t_ver);
+                t_prov *= 1e6;
+                t_ver *= 1e6;
                 printf("N = %d", GQ_NLEN_1024);
-                printf("\n\ravg time prove: %.7f\n", t_prov);
-                printf("\n\ravg time verify: %.7f\n\n", t_ver);
+                printf("\n\ravg time prove: %.1f\n", t_prov);
+                printf("\n\ravg time verify: %.1f\n\n", t_ver);
+                printf("\n\rtotal time: %.1f\n\n", t_ver + t_prov);
 
                 benchmark(GQ_NLEN_2048, 100, &t_prov, &t_ver);
+                t_prov *= 1e6;
+                t_ver *= 1e6;
                 printf("N = %d", GQ_NLEN_2048);
-                printf("\n\ravg time prove: %.7f\n", t_prov);
-                printf("\n\ravg time verify: %.7f\n\n", t_ver);
+                printf("\n\ravg time prove: %.1f\n", t_prov);
+                printf("\n\ravg time verify: %.1f\n\n", t_ver);
+                printf("\n\rtotal time: %.1f\n\n", t_ver + t_prov);
 
                 benchmark(GQ_NLEN_3072, 100, &t_prov, &t_ver);
+                t_prov *= 1e6;
+                t_ver *= 1e6;
                 printf("N = %d", GQ_NLEN_3072);
-                printf("\n\ravg time prove: %.7f\n", t_prov);
-                printf("\n\ravg time verify: %.7f\n\n", t_ver);
+                printf("\n\ravg time prove: %.1f\n", t_prov);
+                printf("\n\ravg time verify: %.1f\n\n", t_ver);
+                printf("\n\rtotal time: %.1f\n\n", t_ver + t_prov);
         }
 
         exit(0);

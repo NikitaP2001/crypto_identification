@@ -11,19 +11,49 @@
 #define P_256_X "48439561293906451759052585252797914202762949526041747995844080717082404635286"
 #define P_256_Y "36134250956749795798585127919587881956611106672985015071877198253568414405109"
 
-#define P_384_P "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffeffffffff0000000000000000ffffffff"
-#define P_384_N "ffffffffffffffffffffffffffffffffffffffffffffffffc7634d81f4372ddf581a0db248b0a77aecec196accc52973"
-#define P_384_A "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffeffffffff0000000000000000fffffffc"
-#define P_384_B "b3312fa7e23ee7e4988e056be3f82d19181d9c6efe8141120314088f5013875ac656398d8a2ed19d2a85c8edd3ec2aef"
-#define P_384_X "aa87ca22be8b05378eb1c71ef320ad746e1d3b628ba79b9859f741e082542a385502f25dbf55296c3a545e3872760ab7"
-#define P_384_Y "3617de4a96262c6f5d9e98bf9292dc29f8f41dbd289a147ce9da3113b5f0b8c00a60b1ce1d7e819d7a431d7c90ea0e5f"
+#define P_384_P "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffeffffffff00000000" \
+		"00000000ffffffff"
+#define P_384_N "ffffffffffffffffffffffffffffffffffffffffffffffffc7634d81f4372ddf581a0db248b0a77a" \
+		"ecec196accc52973"
+#define P_384_A "fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffeffffffff00000000" \
+		"00000000fffffffc"
+#define P_384_B "b3312fa7e23ee7e4988e056be3f82d19181d9c6efe8141120314088f5013875ac656398d8a2ed19d" \
+		"2a85c8edd3ec2aef"
+#define P_384_X "aa87ca22be8b05378eb1c71ef320ad746e1d3b628ba79b9859f741e082542a385502f25dbf55296c" \
+		"3a545e3872760ab7"
+#define P_384_Y "3617de4a96262c6f5d9e98bf9292dc29f8f41dbd289a147ce9da3113b5f0b8c00a60b1ce1d7e819d" \
+		"7a431d7c90ea0e5f"
 
-#define P_521_P "01ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
-#define P_521_N "01fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffa51868783bf2f966b7fcc0148f709a5d03bb5c9b8899c47aebb6fb71e91386409"
-#define P_521_A "01fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffc"
-#define P_521_B "0051953eb9618e1c9a1f929a21a0b68540eea2da725b99b315f3b8b489918ef109e156193951ec7e937b1652c0bd3bb1bf073573df883d2c34f1ef451fd46b503f00"
-#define P_521_X "00c6858e06b70404e9cd9e3ecb662395b4429c648139053fb521f828af606b4d3dbaa14b5e77efe75928fe1dc127a2ffa8de3348b3c1856a429bf97e7e31c2e5bd66"
-#define P_521_Y "011839296a789a3bc0045c8a5fb42c7d1bd998f54449579b446817afbd17273e662c97ee72995ef42640c550b9013fad0761353c7086a272c24088be94769fd16650"
+#define P_521_P "01ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" \
+		"ffffffffffffffffffffffffffffffffffffffffffffffffffff"
+#define P_521_N "01fffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffa51868783bf2f" \
+		"966b7fcc0148f709a5d03bb5c9b8899c47aebb6fb71e91386409"
+#define P_521_A "01ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" \
+		"fffffffffffffffffffffffffffffffffffffffffffffffffffc"
+#define P_521_B "0051953eb9618e1c9a1f929a21a0b68540eea2da725b99b315f3b8b489918ef109e156193951ec7e" \
+		"937b1652c0bd3bb1bf073573df883d2c34f1ef451fd46b503f00"
+#define P_521_X "00c6858e06b70404e9cd9e3ecb662395b4429c648139053fb521f828af606b4d3dbaa14b5e77efe7" \
+		"5928fe1dc127a2ffa8de3348b3c1856a429bf97e7e31c2e5bd66"
+#define P_521_Y "011839296a789a3bc0045c8a5fb42c7d1bd998f54449579b446817afbd17273e662c97ee72995ef4" \
+		"2640c550b9013fad0761353c7086a272c24088be94769fd16650"
+
+static const char *key_d_256 = "8807723079962413571428369049095742764069019342326380235355295272994239715875";
+static const char *key_Qx_256 = "79098906326470030776173750935706630781723410316707508891473817056535653107538";
+static const char *key_Qy_256 = "50846974804062314130454137732211846877570766435293569099752058893645907217162";
+
+static const char *key_d_384 = "34732275202400671981061101396406573285907962913872687948300708947162343737656290" \
+			       "340226268045199802628829192577306173";
+static const char *key_Qx_384 = "32744847611050191520440976881823820443697266364548239720070563204095857898253741" \
+			        "684767323529407430626830743062748752";
+static const char *key_Qy_384 = "36496990838861804638708210344076023280000977808346130904648618287957875706890309" \
+			        "304251843161668127509717271680395890";
+
+static const char *key_d_521 = "32962052834113096711222949869882026417955458197424958625666411445057658557210382" \
+			      "86214166782735416015995859914498263484770106170210514610762988788607567592079";
+static const char *key_Qx_521 = "98176035378732651441602557077510360827224327537770839273365387684878934215633150" \
+			       "0649495719969377662667378564087851235459202255254622945476242072345401722687";
+static const char *key_Qy_521 = "58580060039979019029543826858776379985366998099912894428345349660159936476448546" \
+			       "71987418263627869107276170911467040284621856414915643741150448885552876007502";
 
 static void curve_point_init(struct curve_point *point)
 {
@@ -42,8 +72,9 @@ static void curve_point_clear(struct curve_point *point)
 
 void ecdsa_init(struct ecdsa_params *params, size_t p)
 {
+	params->bitsize = p;
         switch (p) {
-        case 256:
+        case ECDSA_P256:
                 mpz_init_set_str(params->p, P_256_P, 10);
                 mpz_init_set_str(params->n, P_256_N, 10);
                 mpz_init_set_str(params->a, P_256_A, 10);
@@ -52,7 +83,7 @@ void ecdsa_init(struct ecdsa_params *params, size_t p)
                 mpz_init_set_str(params->G.x, P_256_X, 10);
                 mpz_init_set_str(params->G.y, P_256_Y, 10);
                 break;
-        case 384:
+        case ECDSA_P384:
                 mpz_init_set_str(params->p, P_384_P, 16);
                 mpz_init_set_str(params->n, P_384_N, 16);
                 mpz_init_set_str(params->a, P_384_A, 16);
@@ -61,7 +92,7 @@ void ecdsa_init(struct ecdsa_params *params, size_t p)
                 mpz_init_set_str(params->G.x, P_384_X, 16);
                 mpz_init_set_str(params->G.y, P_384_Y, 16);
                 break;
-        case 521:
+        case ECDSA_P521:
                 mpz_init_set_str(params->p, P_521_P, 16);
                 mpz_init_set_str(params->n, P_521_N, 16);
                 mpz_init_set_str(params->a, P_521_A, 16);
@@ -217,6 +248,34 @@ void ecdsa_keys_create(const struct ecdsa_params *params, struct member_keys *ke
         curve_point_init(&keys->Q);
         gmpt_rndmod(keys->d, params->n);
         ecdsa_mul(params, params->G, &keys->Q, keys->d);
+}
+
+
+void ecdsa_keys_load(const struct ecdsa_params *params, struct member_keys *keys)
+{
+	switch (params->bitsize) {
+	case ECDSA_P256:
+		mpz_init_set_str(keys->d, key_d_256, 10);
+		curve_point_init(&keys->Q);
+		mpz_set_str(keys->Q.x, key_Qx_256, 10);
+		mpz_set_str(keys->Q.y, key_Qy_256, 10);
+		break;
+	case ECDSA_P384:
+		mpz_init_set_str(keys->d, key_d_384, 10);
+		curve_point_init(&keys->Q);
+		mpz_set_str(keys->Q.x, key_Qx_384, 10);
+		mpz_set_str(keys->Q.y, key_Qy_384, 10);
+		break;
+	case ECDSA_P521:
+		mpz_init_set_str(keys->d, key_d_521, 10);
+		curve_point_init(&keys->Q);
+		mpz_set_str(keys->Q.x, key_Qx_521, 10);
+		mpz_set_str(keys->Q.y, key_Qy_521, 10);
+		break;
+	default:
+		perror("invalid bitsize");
+		break;
+	}
 }
 
 
